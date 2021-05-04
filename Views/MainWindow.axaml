@@ -13,9 +13,32 @@
     <vm:MainWindowViewModel/>
   </Design.DataContext>
 
+  <Window.DataTemplates>
+    <DataTemplate DataType="c:DataAlpha">
+      <c:ControlAlpha Text="{Binding AlphaText^}"/>
+    </DataTemplate>
+    <DataTemplate DataType="c:DataBeta">
+      <c:ControlBeta Text="{Binding BetaText^}"/>
+    </DataTemplate>
+    <DataTemplate DataType="c:DataGamma">
+      <c:ControlGamma Text="{Binding $parent[Window].DataContext.GammaText}"/>
+    </DataTemplate>
+  </Window.DataTemplates>
+
   <UniformGrid Columns="2">
-    
-    <!-- Instructions -->
+
+    <!-- Leak generator -->
+    <Border BorderBrush="Goldenrod" BorderThickness="1" Padding="3" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+      <ItemsControl Items="{Binding AllItems^}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <ContentPresenter Content="{Binding}"/>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </Border>
+
+    <!-- Instructions and control -->
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
       <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
         <TextBlock Text="1. " VerticalAlignment="Center"/>
@@ -28,24 +51,11 @@
       <TextBlock Text="3. Take a (managed) memory snapshot." VerticalAlignment="Center"/>
       <StackPanel Orientation="Vertical" Spacing="5" VerticalAlignment="Center">
         <TextBlock Text="4. Count instances:" VerticalAlignment="Center"/>
-        <TextBlock Text="• AlphaControl will leak" VerticalAlignment="Center" Margin="20,0,0,0"/>
-        <TextBlock Text="• BetaControl will not leak" VerticalAlignment="Center" Margin="20,0,0,0"/>
+        <TextBlock Text="• Alpha will leak" VerticalAlignment="Center" Margin="20,0,0,0"/>
+        <TextBlock Text="• Beta will not leak" VerticalAlignment="Center" Margin="20,0,0,0"/>
+        <TextBlock Text="• Gamma will not leak" VerticalAlignment="Center" Margin="20,0,0,0"/>
       </StackPanel>
     </StackPanel>
-    
-    <!-- Leak happens here -->
-    <ItemsControl Items="{Binding Specimens^}" HorizontalAlignment="Center" VerticalAlignment="Center">
-      <ItemsControl.ItemTemplate>
-        <DataTemplate>
-          <Border BorderBrush="Goldenrod" BorderThickness="1" IsVisible="{Binding $parent[UserControl].IsVisible}" Padding="1" Margin="2">
-            <StackPanel Orientation="Horizontal" IsVisible="{Binding AlwaysTrue^}">
-              <TextBlock Text="{Binding Name}"/>
-              <ContentControl Content="{Binding LeakTrackingControl}"/>
-            </StackPanel>
-          </Border>
-        </DataTemplate>
-      </ItemsControl.ItemTemplate>
-    </ItemsControl>
   
   </UniformGrid>
 
