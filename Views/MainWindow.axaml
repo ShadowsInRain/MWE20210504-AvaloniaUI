@@ -1,0 +1,52 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:MWE.ViewModels"
+        xmlns:c="using:MWE"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="MWE.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="MWE">
+
+  <Design.DataContext>
+    <vm:MainWindowViewModel/>
+  </Design.DataContext>
+
+  <UniformGrid Columns="2">
+    
+    <!-- Instructions -->
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <TextBlock Text="1. " VerticalAlignment="Center"/>
+        <Button Content="Populate" Command="{Binding PopulateCommand}"/>
+        <TextBlock Text=" and " VerticalAlignment="Center"/>
+        <Button Content="Clear" Command="{Binding ClearCommand}"/>
+        <TextBlock Text=" — once or few times." VerticalAlignment="Center"/>
+      </StackPanel>
+      <TextBlock Text="2. Force GC." VerticalAlignment="Center"/>
+      <TextBlock Text="3. Take a (managed) memory snapshot." VerticalAlignment="Center"/>
+      <StackPanel Orientation="Vertical" Spacing="5" VerticalAlignment="Center">
+        <TextBlock Text="4. Count instances:" VerticalAlignment="Center"/>
+        <TextBlock Text="• AlphaControl will leak" VerticalAlignment="Center" Margin="20,0,0,0"/>
+        <TextBlock Text="• BetaControl will not leak" VerticalAlignment="Center" Margin="20,0,0,0"/>
+      </StackPanel>
+    </StackPanel>
+    
+    <!-- Leak happens here -->
+    <ItemsControl Items="{Binding Specimens^}" HorizontalAlignment="Center" VerticalAlignment="Center">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Border BorderBrush="Goldenrod" BorderThickness="1" IsVisible="{Binding $parent[UserControl].IsVisible}" Padding="1" Margin="2">
+            <StackPanel Orientation="Horizontal" IsVisible="{Binding AlwaysTrue^}">
+              <TextBlock Text="{Binding Name}"/>
+              <ContentControl Content="{Binding LeakTrackingControl}"/>
+            </StackPanel>
+          </Border>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+  
+  </UniformGrid>
+
+</Window>
