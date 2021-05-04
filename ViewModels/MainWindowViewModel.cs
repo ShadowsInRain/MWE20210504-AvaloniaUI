@@ -9,7 +9,7 @@ namespace MWE.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
         readonly BehaviorSubject<IReadOnlyList<Item>> _specimens = new(Array.Empty<Item>());
-        static readonly BehaviorSubject<bool> _alwaysTrue_lasting = new(true);
+        readonly BehaviorSubject<bool> _alwaysTrue_lasting = new(true);
         static BehaviorSubject<bool> _alwaysTrue_ephemeral => new(true);
 
         public record Item(string Name, Control LeakTrackingControl, IObservable<bool> AlwaysTrue);
